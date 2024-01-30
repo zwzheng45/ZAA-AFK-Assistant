@@ -18,11 +18,11 @@ cd ZAA-AFK-Assistant
 ```
 conda create -n zaa python=3.12
 conda activate zaa
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 此外还需安装[Android 调试桥 (ADB)](https://source.android.google.cn/docs/setup/build/adb)   
 
 启动脚本  
 ```
-python main.py
+python3 main.py
 ```
