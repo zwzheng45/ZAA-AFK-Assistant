@@ -2,7 +2,6 @@ from log import *
 import match
 import adb
 import os
-import pygame
 from time import sleep
 
 path="./assets/infinite_pulls/"

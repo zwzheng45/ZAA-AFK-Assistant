@@ -18,7 +18,7 @@ with open('config.json','r') as f:
     else:
         silence=False
 
-def main_mission():
+def main_mission(trial=0,mirror=False):
     adb.capture_screen()
     start_pos=match.match(os.path.join(path,"start.png"))
     i=0
@@ -49,6 +49,8 @@ def main_mission():
     if(i<skip_threshold):
         adb.click(start_pos[0],start_pos[1])
 
+    if(mirror==True):
+        mirror_line_up()
     start_pos=match.match(os.path.join(path,"start_confirm.png"))
     i=0
     while(start_pos==None):
@@ -91,11 +93,20 @@ def main_mission():
 
         log("检测是否失败",3)
         start_pos=match.match(os.path.join(path,"fail.png"))
-        if(start_pos!=None):
-            log("练度过低，打不过...调整队伍后回车返回...",1)
-            notification.failure_warning()
-            input()
-            return -1
+        if (start_pos!=None):
+            if (trial<=6 and trial%2==0):
+                log("战斗失败...尝试重试(%d/6)"%trial,1)
+                adb.click(start_pos[0],start_pos[1])
+                return main_mission(trial+1)
+            elif (trial<=6 and trial%2==1):
+                log("战斗失败...尝试自动镜像站队后重试(%d/6)"%trial,1)
+                adb.click(start_pos[0],start_pos[1])
+                return main_mission(trial+1,True)
+            else:
+                log("练度过低，打不过...调整队伍后回车返回...(7/6)",1)
+                notification.failure_warning()
+                input()
+                return -1
         start_pos=match.match(os.path.join(path,"new_map.png"))
         log("检测是否需要手动开启地图新区域",3)
         if(start_pos!=None):
@@ -113,3 +124,24 @@ def main_mission():
 
 
     return main_mission()
+
+
+def mirror_line_up():
+    log("镜像站队",3)
+    first_pos=None
+    second_pos=None
+    while(first_pos==None or second_pos==None):
+        adb.capture_screen()
+        for root,dirs,files in os.walk(path):
+            for target in files:
+                if target.startswith("Rem") and first_pos==None:
+                    x=match.match(os.path.join(path,target))
+                    if(x!=None):
+                        first_pos=x
+                if target.startswith("zhujiao") and second_pos==None:
+                    y=match.match(os.path.join(path,target))
+                    if(y!=None):
+                        second_pos=y
+                if(first_pos!=None and second_pos!=None):
+                    break
+    adb.swipe(first_pos[0],first_pos[1],second_pos[0],second_pos[1],200)

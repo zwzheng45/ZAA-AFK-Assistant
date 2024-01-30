@@ -3,7 +3,8 @@ import automators
 from log import *
 import settings
 
-print("\n------------------ZSA Starrail Assistant 0.1------------------\n")
+
+print("\n------------------ZAA AFK Assistant 1.0------------------\n")
 # 初始化
 if adb.get_stored_device_id() is None:
     input("初次见面！\n请确保adb已添加至环境变量（简单来说现在打开此电脑上的命令行输入`adb version`要能看到对应的adb版本号）\n请连接设备后并在安卓端允许USB调试以及模拟触控（部分手机）后按回车键继续...")
@@ -120,7 +121,6 @@ def menu():
     else:
         print("没有这个选项，请重试...")
     return menu()
-
 
 
 menu()

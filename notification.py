@@ -1,7 +1,8 @@
 import json
+import os
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
 import pygame
 import sys
-import os
 from time import sleep
 
 with open('config.json','r') as f:

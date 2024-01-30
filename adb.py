@@ -42,7 +42,7 @@ def setup_new_device():
     log("新设备设置引导开始",3)
     while(True):
         devices=get_device_list()
-        if devices!=[]:
+        if devices:
             for i in range(len(devices)):
                 print("%d. %s"%(i+1,devices[i]))
             try:
